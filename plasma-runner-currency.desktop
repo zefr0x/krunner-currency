@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Currency
+Comment=Convert currencies using DuckDuckGo's spice API
+X-KDE-ServiceTypes=Plasma/Runner
+Type=Service
+Icon=view-financial-account-cash
+X-KDE-PluginInfo-Author=zer0-x
+X-KDE-PluginInfo-Website=https://github.com/zer0-x/krunner-currency/
+X-KDE-PluginInfo-Name=Currency
+X-KDE-PluginInfo-Version=0.1.0
+X-KDE-PluginInfo-License=GPL-3.0
+X-KDE-PluginInfo-EnabledByDefault=true
+X-Plasma-API=DBus
+X-Plasma-DBusRunner-Service=com.github.zer0-x.krunner-currency
+X-Plasma-DBusRunner-Path=/krunnerCurrency
