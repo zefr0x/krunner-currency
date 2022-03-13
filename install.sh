@@ -3,6 +3,8 @@
 # Exit if something fails
 set -e
 
+/usr/bin/python3 -m pip install requests
+
 mkdir -p ~/.local/share/kservices5/
 mkdir -p ~/.local/share/dbus-1/services/
 
