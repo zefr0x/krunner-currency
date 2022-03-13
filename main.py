@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """Plasma runner for converting currencies."""
 from gettext import gettext, bindtextdomain, textdomain
-from json import loads
 
 import dbus
 import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
+
+from converter import Converter
 
 bindtextdomain("messages", "locales")
 textdomain("messages")
