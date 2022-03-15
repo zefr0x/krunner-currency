@@ -73,7 +73,7 @@ class Runner(dbus.service.Object):
                     f'{results["amount"]} {results["from"]} '
                     + f'= {results["result"]} {results["to-data"]["code"]}',
                     f'{results["result"]} {results["to-data"]["symbol"]}',
-                    icon_path,
+                    results["to_flag"] or icon_path,
                     100,
                     relevance,
                     {"subtext": results["to-data"]["name"]},
@@ -86,7 +86,7 @@ class Runner(dbus.service.Object):
                         f'{results["amount"]} {results["from"]} '
                         + f'= {conversion["converted-amount"]} {conversion["data"]["code"]}',
                         f'{conversion["converted-amount"]} {conversion["data"]["symbol"]}',
-                        icon_path,
+                        conversion["flag"] or icon_path,
                         100,
                         relevance,
                         {"subtext": conversion["data"]["name"]},

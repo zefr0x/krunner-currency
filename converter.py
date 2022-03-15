@@ -3,6 +3,7 @@ from typing import Optional, Generator
 from functools import lru_cache
 from itertools import groupby
 from json import load as load_json, loads as loads_json
+from pathlib import Path
 
 
 BASE_API_URL = "https://duckduckgo.com/js/spice/currency"
@@ -23,11 +24,20 @@ class Converter:
             open("./data/iso-3166-1-alpha-2-to-iso-4217.json", "r")
         )
 
+        self.flags_base_dir = Path.joinpath(Path(__name__).resolve().parent, "flags")
+
     @staticmethod
     def split_alpha_and_numbers(string: str) -> Generator:
         """Get a string and return list form numbers and alphas."""
         for k, g in groupby(string, str.isalpha):
             yield "".join(g)
+
+    def get_currency_flag_path(self, currency_code: str) -> Optional[str]:
+        """Take a currency code and return the path of its flag."""
+        path = Path.joinpath(self.flags_base_dir, currency_code + ".png")
+        if path.exists():
+            return str(path)
+        return None
 
     def query_parser(self, user_query: str) -> Optional[dict]:
         """Parse user input to a format that can be sent to the API."""
@@ -117,6 +127,7 @@ class Converter:
         description = conversion_data["headers"]["description"]
         utc_timestamp = conversion_data["conversion"]["rate-utc-timestamp"]
         converted_data = self.currencies_data[to_currency]
+        converted_flag = self.get_currency_flag_path(to_currency)
         try:
             converted_amount = round(
                 float(conversion_data["conversion"]["converted-amount"]) * amount,
@@ -136,6 +147,7 @@ class Converter:
                 {
                     "symbol": x["to-currency-symbol"],
                     "data": data,
+                    "flag": self.get_currency_flag_path(x["to-currency-symbol"]),
                     "name": x["to-currency-name"],
                     "converted-amount": converted_amount_,
                 }
@@ -148,6 +160,7 @@ class Converter:
             "time": utc_timestamp,
             "result": converted_amount,
             "to-data": converted_data,
+            "to_flag": converted_flag,
             "top_convertions": top_conversions,
         }
 
