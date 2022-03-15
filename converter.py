@@ -1,10 +1,8 @@
 """Parse queries, send them to the API then parse the result."""
 from typing import Optional, Generator
-from functools import cache
+from functools import lru_cache
 from itertools import groupby
 from json import load as load_json, loads as loads_json
-
-from requests.sessions import Session
 
 
 BASE_API_URL = "https://duckduckgo.com/js/spice/currency"
@@ -15,7 +13,7 @@ class Converter:
 
     def __init__(self):
         """Create a requests session and load currencies data."""
-        self.requests = Session()
+        self.requests = __import__("requests.sessions").Session()
         # self.requests.proxies = {
         #     "http": "socks5h://127.0.0.1:9050",
         #     "https": "socks5h://127.0.0.1:9050",
@@ -100,7 +98,7 @@ class Converter:
             # If the amount can't be converted to float.
             return None
 
-    @cache
+    @lru_cache(13)
     def get_data_from_api(self, from_currency: str, to_currency: str):
         """
         Fetch data from API.
@@ -132,7 +130,7 @@ class Converter:
         for x in conversion_data["topConversions"]:
             data = self.currencies_data[x["to-currency-symbol"]]
             converted_amount_ = round(
-                float(x["converted-amount"]) * amount, int(data["decimalDigits"])
+                float(x["converted-amount"]) * amount, data["decimalDigits"]
             )
             top_conversions.append(
                 {
@@ -145,9 +143,11 @@ class Converter:
 
         return {
             "description": description,
+            "amount": amount,
+            "from": from_currency,
             "time": utc_timestamp,
             "result": converted_amount,
-            "retult_data": converted_data,
+            "to-data": converted_data,
             "top_convertions": top_conversions,
         }
 
