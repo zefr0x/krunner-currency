@@ -116,7 +116,7 @@ class Runner(dbus.service.Object):
                 "org.kde.krunner.App",
             )
 
-            query = f"{key_word} {data_parts[0]} {data_parts[1]} to {data_parts[4]}"
+            query = f"{key_word} {data_parts[0]} {data_parts[4]} to {data_parts[1]}"
             krunner_iface.querySingleRunner("currency-runner", query)
         else:
             # When clicking on the actions buttons.
