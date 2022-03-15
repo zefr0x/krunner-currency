@@ -98,17 +98,41 @@ class Runner(dbus.service.Object):
     @dbus.service.method(IFACE, out_signature="a(sss)")
     def Actions(self) -> list:
         """Return a list of actions."""
-        return [("0", _("Copy convertion"), "edit-copy")]
+        return [
+            ("0", _("Copy result"), "edit-copy"),
+            ("1", _("Copy convertion"), "exchange-positions"),
+            ("2", _("Copy a link to the convertion in xe.com"), "link"),
+        ]
 
     @dbus.service.method(IFACE, in_signature="ss")
     def Run(self, data: str, action_id: str) -> None:
         """Handle actions calls."""
-        if action_id == "0":
+        data_parts = data.split()
+
+        if action_id == "" and data:
+            # When clicking on the results.
+            krunner_iface = dbus.Interface(
+                dbus.SessionBus().get_object("org.kde.krunner", "/App"),
+                "org.kde.krunner.App",
+            )
+
+            query = f"{key_word} {data_parts[0]} {data_parts[1]} to {data_parts[4]}"
+            krunner_iface.querySingleRunner("currency-runner", query)
+        else:
+            # When clicking on the actions buttons.
             klipper_iface = dbus.Interface(
                 dbus.SessionBus().get_object("org.kde.klipper", "/klipper"),
                 "org.kde.klipper.klipper",
             )
-            klipper_iface.setClipboardContents(data)
+            if action_id == "0":
+                klipper_iface.setClipboardContents(data_parts[3])
+            elif action_id == "1":
+                klipper_iface.setClipboardContents(data)
+            elif action_id == "2":
+                klipper_iface.setClipboardContents(
+                    "https://www.xe.com/currencyconverter/convert/"
+                    + f"?Amount={data_parts[0]}&From={data_parts[1]}&To={data_parts[4]}"
+                )
         return None
 
     @dbus.service.method(IFACE)

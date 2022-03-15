@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Currency
+Name=currency-runner
 Comment=Convert currencies using DuckDuckGo's spice API
 X-KDE-ServiceTypes=Plasma/Runner
 Type=Service
