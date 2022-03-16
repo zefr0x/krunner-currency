@@ -7,6 +7,11 @@ from pathlib import Path
 
 
 BASE_API_URL = "https://duckduckgo.com/js/spice/currency"
+# If you wanted to use tor, uncomment the next lines and comment the previous one.
+# BASE_API_URL = (
+#     "https://duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion/"
+#     + "js/spice/currency"
+# )
 
 
 class Converter:
@@ -15,14 +20,19 @@ class Converter:
     def __init__(self):
         """Create a requests session and load currencies data."""
         self.requests = __import__("requests.sessions").Session()
+        # If you wanted to use proxy or tor, uncomment the next lines.
         # self.requests.proxies = {
         #     "http": "socks5h://127.0.0.1:9050",
         #     "https": "socks5h://127.0.0.1:9050",
         # }
         base_dir = Path(__file__).resolve().parent
-        self.currencies_data = load_json(open(Path.joinpath(base_dir, "data/iso-4217.json"), "r"))
+        self.currencies_data = load_json(
+            open(Path.joinpath(base_dir, "data/iso-4217.json"), "r")
+        )
         self.alpha2_to_alpha3 = load_json(
-            open(Path.joinpath(base_dir, "data/iso-3166-1-alpha-2-to-iso-4217.json"), "r")
+            open(
+                Path.joinpath(base_dir, "data/iso-3166-1-alpha-2-to-iso-4217.json"), "r"
+            )
         )
         self.flags_base_dir = Path.joinpath(base_dir, "flags")
 
