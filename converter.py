@@ -19,12 +19,12 @@ class Converter:
         #     "http": "socks5h://127.0.0.1:9050",
         #     "https": "socks5h://127.0.0.1:9050",
         # }
-        self.currencies_data = load_json(open("./data/iso-4217.json", "r"))
+        base_dir = Path(__file__).resolve().parent
+        self.currencies_data = load_json(open(Path.joinpath(base_dir, "data/iso-4217.json"), "r"))
         self.alpha2_to_alpha3 = load_json(
-            open("./data/iso-3166-1-alpha-2-to-iso-4217.json", "r")
+            open(Path.joinpath(base_dir, "data/iso-3166-1-alpha-2-to-iso-4217.json"), "r")
         )
-
-        self.flags_base_dir = Path.joinpath(Path(__name__).resolve().parent, "flags")
+        self.flags_base_dir = Path.joinpath(base_dir, "flags")
 
     @staticmethod
     def split_alpha_and_numbers(string: str) -> Generator:
