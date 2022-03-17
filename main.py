@@ -7,7 +7,8 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
 
-from converter import Converter
+# The next imports are on-time imports (imported when they are needed) to reduce memory usage:
+# from converter import Converter
 
 bindtextdomain("messages", "locales")
 textdomain("messages")
@@ -39,10 +40,8 @@ class Runner(dbus.service.Object):
 
     def get_converter(self):
         """Check if there wasn't Converter object then create new one."""
-        try:
-            assert self.converter
-        except AttributeError:
-            self.converter = Converter()
+        if not hasattr(self, "converter"):
+            self.converter = __import__("converter").Converter()
 
     @dbus.service.method(IFACE, in_signature="s", out_signature="a(sssida{sv})")
     def Match(self, query: str) -> list:
@@ -55,11 +54,11 @@ class Runner(dbus.service.Object):
 
         if results:
             relevance = 13.0
-            if results["description"]:
+            if results["message"]:
                 returns.append(
                     (
                         "",
-                        results["description"],
+                        results["message"],
                         icon_path,
                         100,
                         relevance,
@@ -92,6 +91,17 @@ class Runner(dbus.service.Object):
                         {"subtext": conversion["data"]["name"]},
                     )
                 )
+        else:
+            returns.append(
+                (
+                    "",
+                    _("Error: Unable to parse the input"),
+                    icon_path,
+                    100,
+                    1.0,
+                    {"actions": ""},
+                )
+            )
 
         return returns
 
@@ -116,7 +126,7 @@ class Runner(dbus.service.Object):
                 "org.kde.krunner.App",
             )
 
-            query = f"{key_word} {data_parts[0]} {data_parts[4]} to {data_parts[1]}"
+            query = f"{key_word} {data_parts[0]} {data_parts[4]} {data_parts[1]}"
             krunner_iface.querySingleRunner("currency-runner", query)
         else:
             # When clicking on the actions buttons.
@@ -139,7 +149,7 @@ class Runner(dbus.service.Object):
     def Teardown(self) -> None:
         """Sava memory by deleting objects when not needed and cleaning cache."""
         del self.converter
-        Converter.get_data_from_api.cache_clear()
+        self.converter.get_data_from_api.cache_clear()
         return None
 
 
