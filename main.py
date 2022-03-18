@@ -94,7 +94,18 @@ class Runner(dbus.service.Object):
                             {"subtext": conversion["data"]["name"]},
                         )
                     )
-            else:
+            elif results == {}:
+                returns.append(
+                    (
+                        "",
+                        _("Error: Unable to fetch or parse data from API."),
+                        icon_path,
+                        100,
+                        1.0,
+                        {"actions": ""},
+                    )
+                )
+            elif results is None:
                 returns.append(
                     (
                         "",

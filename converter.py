@@ -20,6 +20,8 @@ PROXIES: dict = {}
 #     "https": "socks5h://127.0.0.1:9050",
 # }
 
+REQUEST_TIMEOUT = 20  # seconds
+
 
 class Converter:
     """Class to parse queries and convert currencies."""
@@ -127,7 +129,7 @@ class Converter:
             return None
 
     @lru_cache(3)
-    def get_data_from_api(self, from_currency: str, to_currency: str) -> dict:
+    def get_data_from_api(self, from_currency: str, to_currency: str) -> Optional[dict]:
         """
         Fetch data from API.
 
@@ -137,14 +139,21 @@ class Converter:
             self.requests = __import__("requests.sessions").Session()
             self.requests.proxies = PROXIES
 
-        response = self.requests.get(f"{BASE_API_URL}/1/{from_currency}/{to_currency}")
-        return loads_json(response.text[19:-4])
+        try:
+            response = self.requests.get(
+                f"{BASE_API_URL}/1/{from_currency}/{to_currency}", timeout=REQUEST_TIMEOUT
+            )
+            return loads_json(response.text[19:-4])
+        except Exception:
+            return None
 
-    def get_results(
-        self, amount: float, from_currency: str, to_currency: str
-    ) -> Optional[dict]:
+    def get_results(self, amount: float, from_currency: str, to_currency: str) -> dict:
         """Send a request to the API to get the rates then calculate the result."""
         conversion_data = self.get_data_from_api(from_currency, to_currency)
+
+        if conversion_data is None:
+            # self.get_data_from_api.cache_clear()
+            return {}
 
         description = conversion_data["headers"]["description"]
         utc_timestamp = conversion_data["conversion"]["rate-utc-timestamp"]
@@ -157,7 +166,7 @@ class Converter:
             )
         except ValueError:
             # If the rate can't be converted to float.
-            return None
+            return {}
 
         top_conversions = []
         for x in conversion_data["topConversions"]:
