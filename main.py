@@ -20,6 +20,7 @@ key_word_length = len(key_word) + 1
 icon_path = "view-financial-account-cash"
 
 DBusGMainLoop(set_as_default=True)
+
 OBJPATH = "/krunnerCurrency"
 IFACE = "org.kde.krunner1"
 SERVICE = "com.github.zer0-x.krunner-currency"
@@ -38,10 +39,11 @@ class Runner(dbus.service.Object):
 
         return None
 
-    def get_converter(self):
+    def get_converter(self) -> None:
         """Check if there wasn't Converter object then create new one."""
         if not hasattr(self, "converter"):
             self.converter = __import__("converter").Converter()
+        return None
 
     @dbus.service.method(IFACE, in_signature="s", out_signature="a(sssida{sv})")
     def Match(self, query: str) -> list:
@@ -52,56 +54,57 @@ class Runner(dbus.service.Object):
             self.get_converter()
             results = self.converter(query[key_word_length:])
 
-        if results:
-            relevance = 13.0
-            if results["message"]:
-                returns.append(
-                    (
-                        "",
-                        results["message"],
-                        icon_path,
-                        100,
-                        relevance,
-                        {"actions": ""},
+            if results:
+                relevance = 1.0
+                if results["message"]:
+                    returns.append(
+                        (
+                            "",
+                            results["message"],
+                            icon_path,
+                            100,
+                            relevance,
+                            {"actions": ""},
+                        )
                     )
-                )
-            relevance -= 1.0
-            # TODO choose code or name or symbol.
-            returns.append(
-                (
-                    f'{results["amount"]} {results["from"]} '
-                    + f'= {results["result"]} {results["to-data"]["code"]}',
-                    f'{results["result"]} {results["to-data"]["symbol"]}',
-                    results["to_flag"] or icon_path,
-                    100,
-                    relevance,
-                    {"subtext": results["to-data"]["name"]},
-                )
-            )
-            for conversion in results["top_convertions"]:
-                relevance -= 1
+
+                relevance -= 0.1
                 returns.append(
                     (
                         f'{results["amount"]} {results["from"]} '
-                        + f'= {conversion["converted-amount"]} {conversion["data"]["code"]}',
-                        f'{conversion["converted-amount"]} {conversion["data"]["symbol"]}',
-                        conversion["flag"] or icon_path,
+                        + f'= {results["result"]} {results["to-data"]["code"]}',
+                        f'{results["result"]} {results["to-data"]["symbol"]}',
+                        results["to_flag"] or icon_path,
                         100,
                         relevance,
-                        {"subtext": conversion["data"]["name"]},
+                        {"subtext": results["to-data"]["name"]},
                     )
                 )
-        else:
-            returns.append(
-                (
-                    "",
-                    _("Error: Unable to parse the input"),
-                    icon_path,
-                    100,
-                    1.0,
-                    {"actions": ""},
+
+                for conversion in results["top_convertions"]:
+                    relevance -= 1
+                    returns.append(
+                        (
+                            f'{results["amount"]} {results["from"]} '
+                            + f'= {conversion["converted-amount"]} {conversion["data"]["code"]}',
+                            f'{conversion["converted-amount"]} {conversion["data"]["symbol"]}',
+                            conversion["flag"] or icon_path,
+                            100,
+                            relevance,
+                            {"subtext": conversion["data"]["name"]},
+                        )
+                    )
+            else:
+                returns.append(
+                    (
+                        "",
+                        _("Error: Unable to parse the input"),
+                        icon_path,
+                        100,
+                        1.0,
+                        {"actions": ""},
+                    )
                 )
-            )
 
         return returns
 
@@ -109,47 +112,54 @@ class Runner(dbus.service.Object):
     def Actions(self) -> list:
         """Return a list of actions."""
         return [
-            ("0", _("Copy result"), "edit-copy"),
-            ("1", _("Copy convertion"), "exchange-positions"),
-            ("2", _("Copy a link to the convertion in xe.com"), "link"),
+            ("copy_result", _("Copy result"), "edit-copy"),
+            ("copy_convertion", _("Copy convertion"), "exchange-positions"),
+            ("copy_link", _("Copy a link to the convertion in xe.com"), "link"),
         ]
 
     @dbus.service.method(IFACE, in_signature="ss")
-    def Run(self, data: str, action_id: str) -> None:
+    def Run(self, data: str, action_name: str) -> None:
         """Handle actions calls."""
         data_parts = data.split()
 
-        if action_id == "" and data:
+        if action_name == "" and data:
             # When clicking on the results.
+            # Create krunner dbus iface.
             krunner_iface = dbus.Interface(
                 dbus.SessionBus().get_object("org.kde.krunner", "/App"),
                 "org.kde.krunner.App",
             )
 
-            query = f"{key_word} {data_parts[0]} {data_parts[4]} {data_parts[1]}"
-            krunner_iface.querySingleRunner("currency-runner", query)
+            krunner_iface.querySingleRunner(
+                "currency-runner",
+                f"{key_word} {data_parts[0]} {data_parts[4]} {data_parts[1]}",
+            )
         else:
             # When clicking on the actions buttons.
+            # Create klipper dbus iface.
             klipper_iface = dbus.Interface(
                 dbus.SessionBus().get_object("org.kde.klipper", "/klipper"),
                 "org.kde.klipper.klipper",
             )
-            if action_id == "0":
+
+            if action_name == "copy_result":
                 klipper_iface.setClipboardContents(data_parts[3])
-            elif action_id == "1":
+            elif action_name == "copy_convertion":
                 klipper_iface.setClipboardContents(data)
-            elif action_id == "2":
+            elif action_name == "copy_link":
                 klipper_iface.setClipboardContents(
                     "https://www.xe.com/currencyconverter/convert/"
                     + f"?Amount={data_parts[0]}&From={data_parts[1]}&To={data_parts[4]}"
                 )
+
         return None
 
     @dbus.service.method(IFACE)
     def Teardown(self) -> None:
         """Sava memory by deleting objects when not needed and cleaning cache."""
-        del self.converter
+        # TODO keep cache for longer time.
         self.converter.get_data_from_api.cache_clear()
+        del self.converter
         return None
 
 

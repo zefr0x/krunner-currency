@@ -24,9 +24,10 @@ PROXIES: dict = {}
 class Converter:
     """Class to parse queries and convert currencies."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Create a requests session and load currencies data."""
         self.base_dir = Path(__file__).resolve().parent
+        return None
 
     def get_currency_flag_path(self, currency_code: str) -> Optional[str]:
         """Take a currency code and return the path of its flag."""
@@ -35,7 +36,7 @@ class Converter:
             return str(path)
         return None
 
-    def load_data(self, name: str):
+    def load_data(self, name: str) -> None:
         """Load data from file to memory."""
         if name == "currencies_data" and not hasattr(self, "currencies_data"):
             self.currencies_data = load_json(
@@ -66,6 +67,7 @@ class Converter:
                     "r",
                 )
             )
+        return None
 
     def query_parser(self, user_query: str) -> Optional[dict]:
         """Parse user input to a format that can be sent to the API."""
@@ -125,7 +127,7 @@ class Converter:
             return None
 
     @lru_cache(3)
-    def get_data_from_api(self, from_currency: str, to_currency: str):
+    def get_data_from_api(self, from_currency: str, to_currency: str) -> dict:
         """
         Fetch data from API.
 
