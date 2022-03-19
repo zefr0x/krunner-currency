@@ -98,7 +98,7 @@ class Runner(dbus.service.Object):
                 returns.append(
                     (
                         "",
-                        _("Error: Unable to fetch or parse data from API."),
+                        _("Error: Unable to fetch or parse data from API"),
                         icon_path,
                         100,
                         1.0,
@@ -142,7 +142,7 @@ class Runner(dbus.service.Object):
             )
 
             krunner_iface.querySingleRunner(
-                "currency-runner",
+                "Currency",
                 f"{key_word} {data_parts[0]} {data_parts[4]} {data_parts[1]}",
             )
         else:

@@ -1,0 +1,41 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2022-03-19 20:44+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: ./main.py:17
+msgid "~"
+msgstr ""
+
+#: ./main.py:101
+msgid "Error: Unable to fetch or parse data from API"
+msgstr ""
+
+#: ./main.py:112
+msgid "Error: Unable to parse the input"
+msgstr ""
+
+#: ./main.py:126
+msgid "Copy result"
+msgstr ""
+
+#: ./main.py:127
+msgid "Copy convertion"
+msgstr ""
+
+#: ./main.py:128
+msgid "Copy a link to the convertion in xe.com"
+msgstr ""
+

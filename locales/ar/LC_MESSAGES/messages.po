@@ -1,0 +1,43 @@
+#
+# zer0-x <zer0-x.7ty50@aleeas.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: Arabic krunner-currency\n"
+"POT-Creation-Date: 2022-03-19 20:44+0300\n"
+"PO-Revision-Date: 2022-03-19 20:26+0300\n"
+"Last-Translator: zer0-x <zer0-x.7ty50@aleeas.com>\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=0 && n%100<=2 ? 4 : 5)\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Lokalize 21.12.3\n"
+
+
+#: ./main.py:17
+msgid "~"
+msgstr "~"
+
+#: ./main.py:101
+msgid "Error: Unable to fetch or parse data from API"
+msgstr "خَطَأ: يَتَعَذَّرُ جَلبُ البَياناتِ أو تَحليلِها مِنَ الـAPI"
+
+#: ./main.py:112
+msgid "Error: Unable to parse the input"
+msgstr "خَطَأ: يَتَعَذَّرُ تَحلِيلُ المُدخَلات"
+
+#: ./main.py:126
+msgid "Copy result"
+msgstr "نَسخُ النَّتيجَة"
+
+#: ./main.py:127
+msgid "Copy convertion"
+msgstr "نَسخُ التَّحويل"
+
+#: ./main.py:128
+msgid "Copy a link to the convertion in xe.com"
+msgstr "نَسخُ رَابِطٍ لِلتَّحويلِ فِي xe.com"
+

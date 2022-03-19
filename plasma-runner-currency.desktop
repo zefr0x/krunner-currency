@@ -1,6 +1,8 @@
 [Desktop Entry]
-Name=currency-runner
+Name=Currency
+Name[ar]=العُملات
 Comment=Convert currencies using DuckDuckGo's spice API
+Comment[ar]=حَوِّل العُملات بِاستِخدامِ وَاجِهَةِ بَرمَجَةِ التَّطبيقاتِ spice الخَاصَّةِ بِـDuckDuckGo
 X-KDE-ServiceTypes=Plasma/Runner
 Type=Service
 Icon=view-financial-account-cash
