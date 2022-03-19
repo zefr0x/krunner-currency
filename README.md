@@ -1,5 +1,5 @@
 # KRunner Currency
-[![Get the runner from kde store](https://raw.githubusercontent.com/ZER0-X/badges/main/kde/store/get-the-app-runner.svg)](https://www.pling.com/p/)
+[![Get the runner from kde store](https://raw.githubusercontent.com/ZER0-X/badges/main/kde/store/get-the-app-runner.svg)](https://www.pling.com/p/1740976/)
 
 A KRunner plugin for converting currencies using DuckDuckGo spice API.
 
