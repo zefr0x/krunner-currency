@@ -37,8 +37,8 @@ You are able to use any type of the following terms:
 - `13.64 sar usd`
 - `13 SAR $`
 - `13 SR $`
-- `13 US euro`
-- `13 dollars riyal`
+- `13 US euro` - Not available yet.
+- `13 dollars riyal` - Not available yet.
 > Not all the currencies are supporter when using a symbol or a name. Take a lock on the `data/` directory.
 ## qeury
 1. Type the keyword `~` in KRunner.
@@ -46,3 +46,8 @@ You are able to use any type of the following terms:
 3. Click `<Enter>` to flip the conversion.
 4. Also you are able to use the actions to copy the result, copy the conversion or copy the URL for the conversion in xe.com
 
+# Todo list
+- [ ] Find better keyword
+- [ ] Support convert by name by creating names dict
+- [ ] Support convert by localized names
+- [ ] Localize the displayed currencies names
