@@ -52,7 +52,7 @@ The amount to be converted will not be sent to the API, but it will query the va
 If i found a good reference for the Config method in KRunner i would've done this in a UI, but i didn't so you need to edit the source code for that feature.
 
 Go to the source directory and open 'converter.py', then comment and uncomment the following lines:
-- To use an onion link if use want to use tor:
+- Use an onion URL if you want to use tor:
 ```diff
 @@ -10,6 +10,6 @@
 - BASE_API_URL = "https://duckduckgo.com/js/spice/currency"
@@ -66,7 +66,7 @@ Go to the source directory and open 'converter.py', then comment and uncomment t
 +     + "js/spice/currency"
 + )
 ```
-- To specify a proxy to be used by the requests session:
+- Specify a proxy to be used by the requests session:
 ```diff
 @@ -17,5 +17,5 @@
 - PROXIES: dict = {}
