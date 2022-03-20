@@ -47,13 +47,14 @@ You are able to use any type of the following terms:
 4. Also you are able to use the actions to copy the result, copy the conversion or copy the URL for the conversion in xe.com
 
 # Privacy
-The amount will not be sent to the API, but it will query the value of 1 currency unit to get the rate, then it will do the conversion locally.
+The amount to be converted will not be sent to the API, but it will query the value of 1 currency unit to get the rate, then it will do the conversion locally.
 ## Using tor or any proxy
 If i found a good reference for the Config method in KRunner i would've done this in a UI, but i didn't so you need to edit the source code for that feature.
 
 Go to the source directory and open 'converter.py', then comment and uncomment the following lines:
 - To use an union link if use want to use tor:
-```python
+```diff
+@@ -10,6 +10,6 @@
 - BASE_API_URL = "https://duckduckgo.com/js/spice/currency"
 + # BASE_API_URL = "https://duckduckgo.com/js/spice/currency"
 - # BASE_API_URL = (
@@ -66,7 +67,8 @@ Go to the source directory and open 'converter.py', then comment and uncomment t
 + )
 ```
 - To specify a proxy to be used by the requests session:
-```python
+```diff
+@@ -17,5 +17,5 @@
 - PROXIES: dict = {}
 + # PROXIES: dict = {}
 - # PROXIES = {
