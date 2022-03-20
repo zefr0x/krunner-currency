@@ -46,6 +46,52 @@ You are able to use any type of the following terms:
 3. Click `<Enter>` to flip the conversion.
 4. Also you are able to use the actions to copy the result, copy the conversion or copy the URL for the conversion in xe.com
 
+# Privacy
+The amount will not be sent to the API, but it will query the value of 1 currency unit to get the rate, then it will do the conversion locally.
+## Using tor or any proxy
+If i found a good reference for the Config method in KRunner i would've done this in a UI, but i didn't so you need to edit the source code for that feature.
+
+Go to the source directory and open 'converter.py', then comment and uncomment the following lines:
+- To use an union link if use want to use tor:
+```python
+- BASE_API_URL = "https://duckduckgo.com/js/spice/currency"
++ # BASE_API_URL = "https://duckduckgo.com/js/spice/currency"
+- # BASE_API_URL = (
+- #     "https://duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion/"
+- #     + "js/spice/currency"
+- # )
++ BASE_API_URL = (
++     "https://duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion/"
++     + "js/spice/currency"
++ )
+```
+- To specify a proxy to be used by the requests session:
+```python
+- PROXIES: dict = {}
++ # PROXIES: dict = {}
+- # PROXIES = {
+- #     "http": "socks5h://127.0.0.1:9050",
+- #     "https": "socks5h://127.0.0.1:9050",
+- # }
++ PROXIES = {
++     "http": "socks5h://127.0.0.1:9050",
++     "https": "socks5h://127.0.0.1:9050",
++ }
+```
+
+# Usage as a python module
+```python
+import converter
+convert = converter.Converter()
+
+# Parsing the input then returning the result
+term = "48.120 eur sa"
+result = convert(term)
+# Or giving direct data without the need te be parsed
+# amount: float, from_currency: str, to_currency: str
+result = convert.get_results(48.120, "EUR", "SAR")
+```
+
 # Todo list
 - [ ] Find better keyword
 - [ ] Support convert by name by creating names dict
