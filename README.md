@@ -1,3 +1,5 @@
+> **Warning** This plugin is not well tested and it should be improved. Don't use it for sensitive operations.
+
 # KRunner Currency
 [![Get the runner from kde store](https://raw.githubusercontent.com/ZER0-X/badges/main/kde/store/get-the-app-runner.svg)](https://www.pling.com/p/1740976/)
 
