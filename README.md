@@ -1,3 +1,7 @@
+> **Warning** : This repository/project is no longer maintained. I'm no longer using KDE's KRunner. If you are interested in the plugin, it's free software under the GPL-3.0 license, so you can create a fork and do any thing you want with it.
+
+If you want an alternative, [`Qalculate!`](https://qalculate.github.io/) is a good project, you can convert currencies using it.
+
 > **Warning** This plugin is not well tested and it should be improved. Don't use it for sensitive operations.
 
 # KRunner Currency
